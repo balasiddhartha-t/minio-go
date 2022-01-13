@@ -102,6 +102,7 @@ type Options struct {
 	Transport    http.RoundTripper
 	Region       string
 	BucketLookup BucketLookupType
+	DisableSSL   bool
 
 	// Custom hash routines. Leave nil to use standard.
 	CustomMD5    func() md5simd.Hasher
@@ -210,7 +211,7 @@ func privateNew(endpoint string, opts *Options) (*Client, error) {
 
 	transport := opts.Transport
 	if transport == nil {
-		transport, err = DefaultTransport(opts.Secure)
+		transport, err = DefaultTransport(opts.Secure, opts.DisableSSL)
 		if err != nil {
 			return nil, err
 		}

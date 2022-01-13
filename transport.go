@@ -42,7 +42,7 @@ func mustGetSystemCertPool() *x509.CertPool {
 // DefaultTransport - this default transport is similar to
 // http.DefaultTransport but with additional param  DisableCompression
 // is set to true to avoid decompressing content with 'gzip' encoding.
-var DefaultTransport = func(secure bool) (*http.Transport, error) {
+var DefaultTransport = func(secure bool, disableSSL bool) (*http.Transport, error) {
 	tr := &http.Transport{
 		Proxy: http.ProxyFromEnvironment,
 		DialContext: (&net.Dialer{
@@ -70,6 +70,9 @@ var DefaultTransport = func(secure bool) (*http.Transport, error) {
 			// Can't use TLSv1.0 because of POODLE and BEAST using CBC cipher
 			// Can't use TLSv1.1 because of RC4 cipher usage
 			MinVersion: tls.VersionTLS12,
+		}
+		if disableSSL {
+			tr.TLSClientConfig.InsecureSkipVerify = true
 		}
 		if f := os.Getenv("SSL_CERT_FILE"); f != "" {
 			rootCAs := mustGetSystemCertPool()

@@ -67,6 +67,7 @@ const (
 	secretKey      = "SECRET_KEY"
 	enableHTTPS    = "ENABLE_HTTPS"
 	enableKMS      = "ENABLE_KMS"
+	enableSSL      = "ENABLE_SSL"
 )
 
 type mintJSONFormatter struct {
@@ -277,6 +278,7 @@ func init() {
 		os.Setenv(accessKey, "Q3AM3UQ867SPQQA43P2F")
 		os.Setenv(secretKey, "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG")
 		os.Setenv(enableHTTPS, "1")
+		os.Setenv(enableSSL, "0")
 	}
 }
 
@@ -4120,7 +4122,7 @@ func testPresignedPostPolicy() {
 	}
 	writer.Close()
 
-	transport, err := minio.DefaultTransport(mustParseBool(os.Getenv(enableHTTPS)))
+	transport, err := minio.DefaultTransport(mustParseBool(os.Getenv(enableHTTPS)), mustParseBool(os.Getenv(enableSSL))
 	if err != nil {
 		logError(testName, function, args, startTime, "", "DefaultTransport failed", err)
 		return
@@ -6031,7 +6033,7 @@ func testFunctional() {
 		return
 	}
 
-	transport, err := minio.DefaultTransport(mustParseBool(os.Getenv(enableHTTPS)))
+	transport, err := minio.DefaultTransport(mustParseBool(os.Getenv(enableHTTPS)), mustParseBool(os.Getenv(enableSSL))
 	if err != nil {
 		logError(testName, function, args, startTime, "", "DefaultTransport failed", err)
 		return
@@ -10920,7 +10922,7 @@ func testFunctionalV2() {
 		return
 	}
 
-	transport, err := minio.DefaultTransport(mustParseBool(os.Getenv(enableHTTPS)))
+	transport, err := minio.DefaultTransport(mustParseBool(os.Getenv(enableHTTPS)), mustParseBool(os.Getenv(enableSSL))
 	if err != nil {
 		logError(testName, function, args, startTime, "", "DefaultTransport failed", err)
 		return
